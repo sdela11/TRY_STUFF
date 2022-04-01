@@ -80,7 +80,7 @@ finalTable <- do.call(rbind, data_list)
 finalTable$DataNumber <-as.factor(finalTable$DataNumber)
 str(finalTable)
 view(finalTable)
-write_csv(finalTable, "ULTRA_merge.csv")
+#write_csv(finalTable, "ULTRA_merge.csv") JUST TO SEE HOW BIG IT IS
 
 ggplot(finalTable, aes(x=date.time, y = value, group = DataNumber, color = DataNumber)) +
   xlab("Group")+
