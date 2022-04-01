@@ -45,17 +45,49 @@ mygraph = ggplot() +
 
 ```{r }
 
-C:\Users\sbaue\coding\R_TEMPRY\Itasca_project_19-21\CLEAN_DATA_copy
+#C:\Users\sbaue\coding\R_TEMPRY\Itasca_project_19-21\CLEAN_DATA_copy
 
 m <- list.files("C:/Users/sbaue/coding/R_TEMPRY/Itasca_project_19-21/CLEAN_DATA_copy", pattern = "*.csv")
 m
 
 file_df <- data.frame(paths = m, name = str_replace(m, ".csv", ""), full_paths = list.files("C:/Users/sbaue/coding/R_TEMPRY/Itasca_project_19-21/CLEAN_DATA_copy", pattern = "*.csv", full.names = TRUE))
 
+#selecting a subset of files
+C2A <- file_df %>% filter(grepl("C2A",name))
+view(C2A)
 view(file_df)
 
-#data <- read.csv("C:/Users/sbaue/coding/R_TEMPRY/Itasca_project_19-21/CLEAN_DATA_copy/C2B_R3_lsurf_i110_2020.csv")
 
+data_list <- lapply(file_df$full_paths, read.csv)
+str(data_list)
+View(data_list)
+
+sapply(n,FUN = ...,simplify = FALSE,USE.NAMES = TRUE)
+?sapply
+
+data_list <- lapply(seq_along(data_list), function(i){
+  df <- data_list[[i]]
+  sensor_name.df <- name %>% 
+    str_split_fixed("_", n=5) %>% 
+    as.data.frame()
+  colnames(sensor_name.df) <- c("site", "rep", "position", "buttonID", "season")
+  df$REP.name <- sensor_name.df$position
+  df
+})
+view(df)
+
+finalTable <- do.call(rbind, data_list)
+finalTable$DataNumber <-as.factor(finalTable$DataNumber)
+str(finalTable)
+view(finalTable)
+write_csv(finalTable, "ULTRA_merge.csv")
+
+ggplot(finalTable, aes(x=date.time, y = value, group = DataNumber, color = DataNumber)) +
+  xlab("Group")+
+  ylab("Data")
+
+#for testing of one file in ggplot:
+#data <- read.csv("C:/Users/sbaue/coding/R_TEMPRY/Itasca_project_19-21/CLEAN_DATA_copy/C2B_R3_lsurf_i110_2020.csv") 
 
 view(data)
 
