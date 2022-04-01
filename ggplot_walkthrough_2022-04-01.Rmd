@@ -1,0 +1,110 @@
+---
+title: "SaraTyler_ggplot_walkthrough_20220401"
+author: "Sara DeLaurentis"
+date: "4/1/2022"
+output: html_document
+---
+
+---
+title: "ggplot_walkthrough_2022-04-01"
+author: "Sara DeLaurentis"
+date: "4/1/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+```
+
+## 
+```{r }
+library(tidyverse)
+library(viridis)
+library(hrbrthemes)
+library(stringr)
+#install.packages("viridis")
+#install.packages("hrbrthemes")
+#hrbrthemes::import_roboto_condensed()
+#install.packages("wesanderson")
+library(wesanderson)
+
+#names(wes_palettes)
+#getAnywhere(wes_palettes)
+
+
+```
+
+## 
+
+mygraph = ggplot() +
+  geom_line(data = set, aes(x = as.POSIXct(date.time, format = "%m/%d/%Y %H:%M"), y = value), size = 1.1) 
+
+
+#10/31/2020 16:00
+
+```{r }
+data <- read.csv("C:/Users/sbaue/coding/R_TEMPRY/Itasca_project_19-21/CLEAN_DATA_copy/C2B_R3_lsurf_i110_2020.csv")
+view(data)
+
+mygraph = ggplot() +
+  geom_line(data = data, aes(x = as.POSIXct(date.time, format = "%m/%d/%Y %H:%M"), y = value), size = 1.1) 
+
+#FOR POSSIBLE ADDITION OF SNOW/PRECIP:
+
+#SNOW DATA
+#NOAA <- read.csv("./NOAA_data_RAW.csv")
+#NOAA$DATE <- as.Date(NOAA$DATE)
+#UMN1 <- NOAA %>% 
+#  filter(STATION == "USC00214106")
+
+#mygraph = mygraph + geom_line(data = UMN1, aes(x = as.Date(DATE), y = SNWD), colour = "light blue", alpha = 0.5, lwd = (2.2))
+print(mygraph)
+
+#PLOT START AND STOP DATES
+start <- as.POSIXct("2019-11-01") #set up start and end dates
+end <- as.POSIXct("2020-08-01")
+
+#PNG FILE DIMENSIONS
+png(file = "testplot_0401.png", width = 2500, height = 1000, units = 'px')
+
+mygraph = mygraph + ggtitle("C2B_test_plot") +
+  ylab("Degrees C") +
+  xlab("Date")
+
+
+#axes adjustments and background adjustments
+
+mygraph = mygraph + scale_x_datetime(date_breaks = "2 weeks", date_labels = "%m/%d/%y", limits = c(start,end)) + #set x-axis scale and label format
+  scale_y_continuous(breaks = seq(-20,25,5), minor_breaks = NULL) #set the y scale
+#seq arguments: seq(from (lowest value), to (highest value), interval)
+args(scale_x_datetime)
+
+mygraph = mygraph + 
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.9,
+                                                     hjust = 0.9, size = rel(2))) +
+  theme(axis.text.y = element_text(size = rel(2)))+
+  coord_cartesian(xlim = c(start, end), ylim = c(-20, 35)) +
+  theme(legend.position = c(0.9, 0.7)) 
+  #theme(legend.justification = c("bottom", "right")) 
+
+
+mygraph = mygraph + theme(plot.title = element_text(hjust = 0.5, size = rel(2.5), face = "bold")) +
+  theme(axis.title = element_text(size = rel(2.75)))
+
+mygraph = mygraph + 
+  labs(subtitle = "INSERT SUBTITLE HERE", fill = "Sensor Position") +
+  theme(plot.subtitle = element_text(size = rel(1.75), face = "italic", hjust = 0.5)) +
+  theme(legend.text=element_text(size= rel(1.75)))+
+  theme(legend.title=element_text(size = rel(1.9), face = "bold"))
+#mygraph = mygraph + theme(plot.caption = element_text(size = rel(2))) + 
+  theme(plot.margin = unit(c(20,45,5,20), "pt"))
+
+
+?labs
+
+print(mygraph)
+dev.off()
+
+
+```
