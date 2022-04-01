@@ -44,7 +44,19 @@ mygraph = ggplot() +
 #10/31/2020 16:00
 
 ```{r }
-data <- read.csv("C:/Users/sbaue/coding/R_TEMPRY/Itasca_project_19-21/CLEAN_DATA_copy/C2B_R3_lsurf_i110_2020.csv")
+
+C:\Users\sbaue\coding\R_TEMPRY\Itasca_project_19-21\CLEAN_DATA_copy
+
+m <- list.files("C:/Users/sbaue/coding/R_TEMPRY/Itasca_project_19-21/CLEAN_DATA_copy", pattern = "*.csv")
+m
+
+file_df <- data.frame(paths = m, name = str_replace(m, ".csv", ""), full_paths = list.files("C:/Users/sbaue/coding/R_TEMPRY/Itasca_project_19-21/CLEAN_DATA_copy", pattern = "*.csv", full.names = TRUE))
+
+view(file_df)
+
+#data <- read.csv("C:/Users/sbaue/coding/R_TEMPRY/Itasca_project_19-21/CLEAN_DATA_copy/C2B_R3_lsurf_i110_2020.csv")
+
+
 view(data)
 
 mygraph = ggplot() +
